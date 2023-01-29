@@ -13,8 +13,9 @@ import { AuthModule } from './modules/auth/auth.module';
     AuthModule,
   ],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(CorsMiddleware).forRoutes(AuthController);
-  }
-}
+export class AppModule {}
+// export class AppModule implements NestModule {
+//   configure(consumer: MiddlewareConsumer) {
+//     consumer.apply(CorsMiddleware).forRoutes(AuthController);
+//   }
+// }

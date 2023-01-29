@@ -1,23 +1,28 @@
-import React, {useEffect, useState} from 'react'
-import { GetStaticProps } from 'next'
-import { Button, Input } from 'src/components'
-import { useApi } from 'src/hooks'
-import { api } from 'src/constants/api'
-
+import React from "react";
+import { Button, Input, A } from "src/components";
+import { useLogin } from "src/modules/auth/hooks";
 
 export default function Login() {
-  const {request} = useApi()
-
-  const onLogin = async () => {
-    const res = await request(api.auth.login)
-    console.log('res', res)
-  }
+  const { onLogin, emailRef, passwordRef, isError } = useLogin();
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen py-2'>
-      <h1 className="text-3xl font-bold underline">LOGIN</h1>
-      <Input />
-      <Button onClick={onLogin} label="Login"/>
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="border p-8">
+        <h1 className="text-2xl font-bold text-center m-2 mb-5">LOGIN</h1>
+        <Input label="Email" inputRef={emailRef} isError={isError} />
+        <Input
+          label="Password"
+          type="password"
+          inputRef={passwordRef}
+          isError={isError}
+        />
+        <div className="flex items-center justify-center">
+          <Button onClick={onLogin} label="Login" />
+        </div>
+        <div className="flex items-center justify-center mt-4">
+          <A href={"/sign-up"} label="Make account" />
+        </div>
+      </div>
     </div>
-  )
+  );
 }
