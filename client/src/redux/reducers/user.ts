@@ -6,15 +6,16 @@ interface IUserState {
   email: string;
 }
 
-const initialState: { user: IUserState | null } = {
-  user: null,
-};
+const initialState: IUserState | null = null;
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser(state, { payload: user }: PayloadAction<any>) {
+    setUser(state: IUserState | null, { payload: user }: PayloadAction<any>) {
+      if (state === null) {
+        return user;
+      }
       return { ...state, user };
     },
   },

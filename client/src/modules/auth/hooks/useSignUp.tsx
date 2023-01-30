@@ -21,8 +21,9 @@ export const useSignUp = () => {
   );
 
   useEffect(() => {
-    const token = LSGetter(LSItems.AUTH);
-    if (token) {
+    const access_token = LSGetter(LSItems.ACCESS_KEY);
+    const refresh_token = LSGetter(LSItems.REFRESH_KEY);
+    if (access_token && refresh_token) {
       router.push("/");
     }
   }, []);

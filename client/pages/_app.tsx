@@ -5,6 +5,11 @@ import { store } from "src/redux/store";
 import { LSItems, publicPaths } from "src/constants";
 import { LSGetter } from "src/helpers";
 import { useRouter } from "next/router";
+import { useApi } from "src/hooks";
+import { api } from "src/constants/api";
+import { _fetch } from "src/helpers/_fetch";
+import { useDispatch } from "react-redux";
+import { setUser } from "src/redux/reducers/user";
 
 interface AppProps {
   Component: React.ComponentType;
@@ -32,15 +37,24 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   const checkAuth = async (url: string) => {
     const path = url.split("?")[0];
     console.log("path", path);
-    const authData = LSGetter(LSItems.AUTH);
+    const refresh_token = LSGetter(LSItems.REFRESH_KEY);
+    const access_token = LSGetter(LSItems.ACCESS_KEY);
 
-    if (!authData && !publicPaths.includes(path)) {
+    if ((!refresh_token || !access_token) && !publicPaths.includes(path)) {
       setIsAuthorized(false);
       router.push({
         pathname: "/login",
         query: { returnUrl: router.asPath },
       });
     } else {
+      // const { user, status } = await _fetch(api.user.getUser);
+      // if (status) {
+      //   dispatch(setUser(user));
+      //   setIsAuthorized(true);
+      // } else {
+      //   localStorage.clear();
+      // }
+
       setIsAuthorized(true);
     }
   };

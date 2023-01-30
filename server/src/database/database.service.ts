@@ -19,11 +19,12 @@ export class DBService {
   };
 
   getById = async (id) => {
-    return await this.database.findOne({ _id: id });
+    const _id = new mongodb.ObjectID(id);
+    return await this.database.findOne({ _id });
   };
 
-  getAll = async () => {
-    return await this.database.find({}).toArray();
+  getAll = async (data) => {
+    return await this.database.find(data).toArray();
   };
 
   create = async (data) => {
@@ -31,7 +32,14 @@ export class DBService {
     return await this.database.insertOne(data);
   };
 
-  update = async (uniqParam, newData) => {
-    return await this.database.findOneAndUpdate();
+  update = async (id, newData) => {
+    const _id = new mongodb.ObjectID(id);
+    return await this.database.findOneAndUpdate(
+      { _id },
+      {
+        $set: newData,
+      },
+      { returnDocument: 'after' },
+    );
   };
 }

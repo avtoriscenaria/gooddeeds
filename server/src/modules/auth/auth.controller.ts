@@ -1,4 +1,4 @@
-import { Controller, Post, Put, Body } from '@nestjs/common';
+import { Controller, Post, Put, Body, Get, Req } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 
@@ -17,5 +17,10 @@ export class AuthController {
   @Post('/login')
   loginUser(@Body() loginData: { email: string; password: string }) {
     return this.auth.loginUser(loginData);
+  }
+
+  @Get('/refresh')
+  refresh(@Req() reqData) {
+    return this.auth.refresh(reqData);
   }
 }

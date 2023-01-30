@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { HOST } from "src/constants/api";
+import { _fetch } from "src/helpers/_fetch";
 
 interface ApiProps {
   method: string;
@@ -12,18 +12,12 @@ export const useApi = () => {
   const [requestError, setRequestError] = useState(false);
 
   const request = async (
-    { method, url }: ApiProps,
+    apiInfo: ApiProps,
     body: { [key: string]: any } = {}
   ) => {
     setIsLoading(true);
     try {
-      const res = await fetch(`${HOST}${url}`, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: method !== "GET" ? JSON.stringify(body) : undefined,
-      }).then((res) => res.json());
+      const res = await _fetch(apiInfo, body);
       console.log("res", res);
       setData(res);
       setIsLoading(false);

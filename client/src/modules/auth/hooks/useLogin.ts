@@ -19,17 +19,19 @@ export const useLogin = () => {
   );
 
   useEffect(() => {
-    const token = LSGetter(LSItems.AUTH);
-    if (token) {
+    const access_token = LSGetter(LSItems.ACCESS_KEY);
+    const refresh_token = LSGetter(LSItems.REFRESH_KEY);
+    if (access_token && refresh_token) {
       router.push("/");
     }
   }, []);
 
   useEffect(() => {
     if (data) {
-      const { token, user } = data;
-      if (token) {
-        localStorage.setItem(LSItems.AUTH, token);
+      const { access_token, refresh_token } = data;
+      if (access_token && refresh_token) {
+        localStorage.setItem(LSItems.REFRESH_KEY, refresh_token);
+        localStorage.setItem(LSItems.ACCESS_KEY, access_token);
 
         const returnUrl: string | undefined =
           typeof router.query.returnUrl === "string"

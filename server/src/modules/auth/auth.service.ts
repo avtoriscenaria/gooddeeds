@@ -16,9 +16,9 @@ export class AuthService {
     nickname: string;
     password: string;
   }) {
-    const user = await this.userModel.get({ email });
-
-    if (Boolean(user)) {
+    const user = await this.userModel.get({ $or: [{ email }, { nickname }] });
+    console.log('user', user);
+    if (user) {
       throw new HttpException(
         'Such user already exists',
         HttpStatus.BAD_REQUEST,
@@ -43,11 +43,17 @@ export class AuthService {
       const isPasswordCorrect = await argon2.verify(user.password, password);
       console.log('isPasswordCorrect', isPasswordCorrect);
       if (isPasswordCorrect) {
-        const token = await this.jwt.generateToken(user);
+        const payload = {
+          _id: user._id,
+          nickname: user.nickname,
+          email: user.email,
+        };
+        const tokens = await this.jwt.generateToken(payload);
+
         const { _id, nickname, email } = user;
 
         return {
-          token,
+          ...tokens,
           user: { _id, nickname, email },
         };
       } else {
@@ -62,5 +68,17 @@ export class AuthService {
         HttpStatus.BAD_REQUEST,
       );
     }
+  }
+
+  async refresh(req) {
+    const data = this.jwt.decodeToken(req);
+    if (!data) {
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+    }
+
+    const tokens = await this.jwt.generateToken(data);
+    console.log('tokens', tokens);
+
+    return { status: true, ...tokens };
   }
 }

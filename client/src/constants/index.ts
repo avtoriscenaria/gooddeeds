@@ -1,5 +1,6 @@
 export enum LSItems {
-  AUTH = "gd_auth",
+  REFRESH_KEY = "gd_refresh_key",
+  ACCESS_KEY = "gd_access_key",
 }
 
 export const publicPaths = ["/login", "/sign-up"];
