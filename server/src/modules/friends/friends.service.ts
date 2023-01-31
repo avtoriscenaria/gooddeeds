@@ -1,3 +1,4 @@
+import * as mongodb from 'mongodb';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserDBService } from 'src/database/services';
 import { JWT } from 'src/services/jwt.service';
@@ -12,13 +13,15 @@ export class FriendsService {
       throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }
 
-    //"items.id": { $in: idArray }
+    const user = await this.userModel.getById(data._id);
 
     const friends = await this.userModel.getAll({
-      subscribers: { $in: [data._id] },
+      _id: { $in: user.friends || [] },
     });
-    console.log('friends', friends);
-    return friends || [];
+    return {
+      ok: true,
+      data: (friends || []).map((el) => ({ ...el, password: undefined })),
+    };
   }
 
   async searchFriends(query) {
@@ -27,6 +30,23 @@ export class FriendsService {
       nickname: { $regex: new RegExp(nickname, 'i') },
     });
     console.log('fre', friends);
-    return (friends || []).map((el) => ({ ...el, password: undefined }));
+    return {
+      ok: true,
+      data: (friends || []).map((el) => ({ ...el, password: undefined })),
+    };
+  }
+
+  async addFriend(req, query) {
+    const data = this.jwt.decodeToken(req);
+    if (!data) {
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+    }
+    const { friend_id } = query;
+    const user = await this.userModel.getById(data._id);
+
+    const upd = await this.userModel.update(data._id, {
+      friends: [...(user.friends || []), new mongodb.ObjectID(friend_id)],
+    });
+    return { ok: true };
   }
 }

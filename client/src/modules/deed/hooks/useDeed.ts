@@ -14,7 +14,7 @@ export const useDeed = (type?: string) => {
 
   useEffect(() => {
     if (type === "editor" && deedId) {
-      getDeed(api.deads.getDeed(deedId));
+      getDeed(api.deeds.getDeed(deedId));
     } else if (type !== "editor") {
       setIsLoad(true);
     }
@@ -42,7 +42,7 @@ export const useDeed = (type?: string) => {
 
   const onSubbmit = async () => {
     subbmitDeed(
-      type === "editor" ? api.deads.updateDeed(deedId) : api.deads.addDeed,
+      type === "editor" ? api.deeds.updateDeed(deedId) : api.deeds.addDeed,
       { name: deedName, text: deedText }
     );
   };

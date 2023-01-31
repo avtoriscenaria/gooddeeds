@@ -18,8 +18,8 @@ export const useMain = () => {
   }, [user]);
 
   useEffect(() => {
-    if (data && data.user && user === null) {
-      dispatch(setUser(data.user));
+    if (data && user === null) {
+      dispatch(setUser(data));
     }
   }, [data, user]);
 

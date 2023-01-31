@@ -6,7 +6,7 @@ import { getTokenFromHeader } from 'src/helpers';
 export class JWT {
   constructor() {}
 
-  async generateToken(data) {
+  async generateToken(data, uuid_key) {
     const signature = process.env.SECRET;
     const expiration_access = process.env.EXPIRATION_ACCESS_JWT;
     const expiration_refresh = process.env.EXPIRATION_REFRESH_JWT;
@@ -14,7 +14,7 @@ export class JWT {
     const access_token = jwt.sign({ data }, signature, {
       expiresIn: expiration_access,
     });
-    const refresh_token = jwt.sign({ data }, signature, {
+    const refresh_token = jwt.sign({ data }, uuid_key, {
       expiresIn: expiration_refresh,
     });
 

@@ -6,15 +6,24 @@ import { JWT } from 'src/services/jwt.service';
 export class DeedsService {
   constructor(private deedModel: DeedDBService, private readonly jwt: JWT) {}
 
-  async getDeeds(req) {
-    const data = this.jwt.decodeToken(req);
-    if (!data) {
-      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+  async getDeeds(req, params?: any) {
+    let _user_id = '';
+    if (params) {
+      const { user_id } = params;
+      _user_id = user_id;
+    } else {
+      const data = this.jwt.decodeToken(req);
+      if (!data) {
+        throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+      }
+      _user_id = data._id;
     }
 
-    const deeds = await this.deedModel.getAll({ user_id: data._id });
-
-    return deeds || [];
+    const deeds = await this.deedModel.getAll({ user_id: _user_id });
+    return {
+      ok: true,
+      data: deeds || [],
+    };
   }
 
   async updateDeed(req, deedData, params?: any) {
@@ -33,7 +42,7 @@ export class DeedsService {
           text: deedData.text,
         });
 
-        return { status: true };
+        return { ok: true };
       }
       throw new HttpException('Have not such data', HttpStatus.BAD_REQUEST);
     } else {
@@ -47,7 +56,7 @@ export class DeedsService {
       console.log('deeds', deed);
     }
 
-    return { status: true };
+    return { ok: true };
   }
 
   async getDeed(req, params) {
@@ -56,13 +65,28 @@ export class DeedsService {
       throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }
     const { deed_id } = params;
-
+    console.log('iid', deed_id);
     const deed = await this.deedModel.getById(deed_id);
 
     if (deed && deed.user_id === data._id) {
-      return deed;
+      return { ok: true, data: deed };
     }
 
     throw new HttpException('Have not such data', HttpStatus.BAD_REQUEST);
+  }
+
+  async deleteDeed(req, params) {
+    const data = this.jwt.decodeToken(req);
+    if (!data) {
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+    }
+    const { deed_id } = params;
+    const deed = await this.deedModel.getById(deed_id);
+
+    if (deed && deed.user_id === data._id) {
+      console.log('DELETE');
+    }
+
+    return { ok: true };
   }
 }

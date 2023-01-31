@@ -16,7 +16,7 @@ export class UserService {
     if (user) {
       const { _id, email, nickname } = user;
 
-      return { user: { _id, email, nickname }, status: true };
+      return { data: { _id, email, nickname }, ok: true };
     }
   }
 }

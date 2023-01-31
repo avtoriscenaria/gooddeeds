@@ -10,9 +10,11 @@ interface PropTypes {
 export const MainContainer = ({ children }: PropTypes) => {
   const { user } = useMain();
   return (
-    <div>
-      <div>Login with {user.nickname}</div>
-      {children}
+    <div className="flex flex-col h-full">
+      <div className="flex items-center justify-end p-3 border-b">
+        Login with {user.nickname}
+      </div>
+      <div className="flex-grow overflow-hidden">{children}</div>
     </div>
   );
 };

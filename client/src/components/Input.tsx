@@ -13,6 +13,8 @@ interface PropTypes {
   isTextArea?: boolean;
   name?: string;
   value?: string;
+  onBlur?: () => void;
+  onFocus?: () => void;
 }
 
 export const Input = ({
@@ -26,19 +28,23 @@ export const Input = ({
   isTextArea,
   name,
   value,
+  onBlur,
+  onFocus,
 }: PropTypes) => {
   const [isVisible, setIsVisible] = useState(false);
 
   return (
-    <div className={`my-4 ${className ? " " + className : ""}`}>
+    <div className={`my-4 min-w-fit ${className ? " " + className : ""}`}>
       {label && <div className="mr-2 text-sm mb-1">{label}</div>}
       <div className="relative">
         {isTextArea ? (
           <textarea
+            rows={12}
+            cols={50}
             name={name}
             value={value}
             ref={textareaRef}
-            className={`border h-8 px-3${isError ? " border-rose-600" : ""}`}
+            className={`border px-3${isError ? " border-rose-600" : ""}`}
             onChange={onChange}
           />
         ) : (
@@ -49,6 +55,8 @@ export const Input = ({
             className={`border h-8 px-3${isError ? " border-rose-600" : ""}`}
             type={isVisible ? "default" : type}
             onChange={onChange}
+            onBlur={onBlur}
+            onFocus={onFocus}
           />
         )}
 

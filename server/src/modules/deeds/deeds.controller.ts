@@ -1,4 +1,13 @@
-import { Controller, Get, Req, Put, Body, Param, Patch } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Req,
+  Put,
+  Body,
+  Param,
+  Patch,
+  Delete,
+} from '@nestjs/common';
 
 import { DeedsService } from './deeds.service';
 
@@ -7,22 +16,32 @@ export class DeedsController {
   constructor(private readonly deeds: DeedsService) {}
 
   @Get('/')
-  getDeeds(@Req() reqData) {
-    return this.deeds.getDeeds(reqData);
+  getUserDeeds(@Req() req) {
+    return this.deeds.getDeeds(req);
+  }
+
+  @Get('/:user_id')
+  getDeeds(@Req() req, @Param() params) {
+    return this.deeds.getDeeds(req, params);
   }
 
   @Put('/')
-  addDeed(@Req() reqData, @Body() deedData) {
-    return this.deeds.updateDeed(reqData, deedData);
+  addDeed(@Req() req, @Body() body) {
+    return this.deeds.updateDeed(req, body);
   }
 
   @Patch('/:deed_id')
-  updateDeed(@Req() reqData, @Body() deedData, @Param() reqParam) {
-    return this.deeds.updateDeed(reqData, deedData, reqParam);
+  updateDeed(@Req() req, @Body() body, @Param() params) {
+    return this.deeds.updateDeed(req, body, params);
   }
 
-  @Get('/:deed_id')
-  getDeed(@Req() reqData, @Param() reqParam) {
-    return this.deeds.getDeed(reqData, reqParam);
+  @Delete('/:deed_id')
+  deleteDeed(@Req() req, @Param() params) {
+    return this.deeds.deleteDeed(req, params);
+  }
+
+  @Get('/deed/:deed_id')
+  getDeed(@Req() req, @Param() params) {
+    return this.deeds.getDeed(req, params);
   }
 }

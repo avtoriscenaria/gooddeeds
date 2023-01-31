@@ -1,4 +1,5 @@
 import * as argon2 from 'argon2';
+import { v4 as uuidv4 } from 'uuid';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserDBService } from 'src/database/services';
 import { JWT } from 'src/services/jwt.service';
@@ -31,7 +32,7 @@ export class AuthService {
         password: passwordHashed,
       });
       console.log('res', res);
-      return { status: 'ok' };
+      return { ok: true };
     }
   }
 
@@ -48,13 +49,18 @@ export class AuthService {
           nickname: user.nickname,
           email: user.email,
         };
-        const tokens = await this.jwt.generateToken(payload);
+        const uuid_key = uuidv4();
+        await this.userModel.update(user._id, { uuid_key });
+        const tokens = await this.jwt.generateToken(payload, uuid_key);
 
         const { _id, nickname, email } = user;
 
         return {
-          ...tokens,
-          user: { _id, nickname, email },
+          ok: true,
+          data: {
+            ...tokens,
+            user: { _id, nickname, email },
+          },
         };
       } else {
         throw new HttpException(
@@ -76,9 +82,16 @@ export class AuthService {
       throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }
 
-    const tokens = await this.jwt.generateToken(data);
-    console.log('tokens', tokens);
+    const user = await this.userModel.getById(data._id);
+    if (user) {
+      const uuid_key = uuidv4();
+      await this.userModel.update(data._id, { uuid_key });
 
-    return { status: true, ...tokens };
+      const tokens = await this.jwt.generateToken(data, uuid_key);
+      console.log('tokens', tokens);
+
+      return { ok: true, data: tokens };
+    }
+    throw new HttpException('refresh broken', HttpStatus.BAD_REQUEST);
   }
 }

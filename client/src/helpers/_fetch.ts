@@ -21,7 +21,6 @@ const __fetch = async (
     },
     body: method !== "GET" ? JSON.stringify(body) : undefined,
   }).then((res) => res.json());
-  console.log("res", res);
 
   return res;
 };
@@ -33,12 +32,11 @@ export const _fetch = async (
   const res = await __fetch(apiInfo, body);
   if (res.statusCode === 403) {
     const refreshToken = LSGetter(LSItems.REFRESH_KEY);
-    let { status, refresh_token, access_token } = await __fetch(
-      api.auth.refreshToken,
-      {},
-      refreshToken
-    );
-    if (status) {
+    let {
+      ok,
+      data: { refresh_token, access_token },
+    } = await __fetch(api.auth.refreshToken, {}, refreshToken);
+    if (ok) {
       localStorage.setItem(LSItems.ACCESS_KEY, access_token);
       localStorage.setItem(LSItems.REFRESH_KEY, refresh_token);
       return __fetch(apiInfo, body);

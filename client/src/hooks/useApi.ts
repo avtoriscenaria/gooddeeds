@@ -18,8 +18,15 @@ export const useApi = () => {
     setIsLoading(true);
     try {
       const res = await _fetch(apiInfo, body);
-      console.log("res", res);
-      setData(res);
+
+      if (res.ok) {
+        if (res.data) {
+          setData(res.data);
+        }
+
+        setIsLoading(false);
+        return res;
+      }
       setIsLoading(false);
     } catch (e: any) {
       console.log("e", e.message);
@@ -27,5 +34,13 @@ export const useApi = () => {
     }
   };
 
-  return { request, isLoading, data, requestError };
+  const clean = () => {
+    setData(null);
+  };
+
+  const update = (updatedData: any) => {
+    setData(updatedData);
+  };
+
+  return { request, isLoading, data, requestError, clean, update };
 };
