@@ -4,6 +4,7 @@ interface IUserState {
   _id: string;
   nickname: string;
   email: string;
+  friends: string[];
 }
 
 const initialState: IUserState | null = null;
@@ -18,8 +19,33 @@ const userSlice = createSlice({
       }
       return { ...state, user };
     },
+    //@ts-ignore
+    addFriend(
+      state: IUserState | null,
+      { payload: friend_id }: PayloadAction<any>
+    ): IUserState | null {
+      if (state !== null) {
+        return { ...state, friends: [...(state.friends || []), friend_id] };
+      }
+      return state;
+    },
+    //@ts-ignore
+    deleteFriend(
+      state: IUserState | null,
+      { payload: friend_id }: PayloadAction<any>
+    ): IUserState | null {
+      if (state !== null) {
+        return {
+          ...state,
+          friends: (state.friends || []).filter(
+            (_friend_id: string) => _friend_id !== friend_id
+          ),
+        };
+      }
+      return state;
+    },
   },
 });
 
-export const { setUser } = userSlice.actions;
+export const { setUser, addFriend, deleteFriend } = userSlice.actions;
 export default userSlice.reducer;

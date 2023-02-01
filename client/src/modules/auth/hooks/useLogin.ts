@@ -11,7 +11,6 @@ export const useLogin = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [isError, setIsError] = useState(false);
-  console.log("roy", router);
 
   const _isError = useMemo(
     () => isError || requestError,

@@ -1,2 +1,3 @@
-export { Accordion } from "./Accordion";
+export { DeedCard } from "./DeedCard";
 export { FriendsSearch } from "./FriendsSearch";
+export { FriendCard } from "./FriendCard";

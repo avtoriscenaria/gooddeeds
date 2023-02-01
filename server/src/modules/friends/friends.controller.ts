@@ -1,4 +1,13 @@
-import { Controller, Get, Req, Body, Next, Query, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Req,
+  Body,
+  Next,
+  Query,
+  Param,
+  Delete,
+} from '@nestjs/common';
 
 import { FriendsService } from './friends.service';
 
@@ -12,12 +21,17 @@ export class FriendsController {
   }
 
   @Get('/search')
-  searchFriends(@Query() query) {
-    return this.friends.searchFriends(query);
+  searchFriends(@Req() req, @Query() query) {
+    return this.friends.searchFriends(req, query);
   }
 
   @Get('/add/:friend_id')
   addFriend(@Req() req, @Param() param) {
     return this.friends.addFriend(req, param);
+  }
+
+  @Delete('/delete/:friend_id')
+  deleteFriend(@Req() req, @Param() param) {
+    return this.friends.deleteFriend(req, param);
   }
 }

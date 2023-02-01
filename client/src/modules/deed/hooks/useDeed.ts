@@ -1,28 +1,40 @@
 import { useRouter } from "next/router";
-import { ChangeEvent, useState, useEffect } from "react";
+import { ChangeEvent, useState, useEffect, useMemo } from "react";
+import { DEED_EDITOR_TYPE } from "src/constants";
 import { api } from "src/constants/api";
 import { useApi } from "src/hooks";
+import { V_deed } from "../validators";
 
 export const useDeed = (type?: string) => {
   const [isLoad, setIsLoad] = useState(false);
   const router = useRouter();
   const deedId: any = router.query.id;
-  const { request: subbmitDeed } = useApi();
-  const { request: getDeed, data: initialDeed }: any = useApi();
+  const { request: subbmitDeed, isLoading: isSaving } = useApi();
+  const {
+    request: getDeed,
+    data: initialDeed,
+    isLoading: _isLoading,
+  }: any = useApi();
   const [deedName, setDeedName] = useState("");
   const [deedText, setDeedText] = useState("");
+  const [error, setError] = useState("");
+
+  const isLoading = useMemo(
+    () => type === DEED_EDITOR_TYPE && _isLoading,
+    [_isLoading]
+  );
 
   useEffect(() => {
-    if (type === "editor" && deedId) {
+    if (type === DEED_EDITOR_TYPE && deedId) {
       getDeed(api.deeds.getDeed(deedId));
-    } else if (type !== "editor") {
+    } else if (type !== DEED_EDITOR_TYPE) {
       setIsLoad(true);
     }
   }, [deedId]);
 
   useEffect(() => {
     console.log("initialDeed");
-    if (type === "editor" && initialDeed && !isLoad) {
+    if (type === DEED_EDITOR_TYPE && initialDeed && !isLoad) {
       setDeedName(initialDeed.name);
       setDeedText(initialDeed.text);
       setIsLoad(true);
@@ -41,11 +53,30 @@ export const useDeed = (type?: string) => {
   };
 
   const onSubbmit = async () => {
-    subbmitDeed(
-      type === "editor" ? api.deeds.updateDeed(deedId) : api.deeds.addDeed,
-      { name: deedName, text: deedText }
-    );
+    const deedData = {
+      name: deedName.trim(),
+      text: deedText.trim(),
+    };
+    const { isValid, errors } = V_deed(deedData);
+    if (isValid) {
+      const res = await subbmitDeed(
+        type === DEED_EDITOR_TYPE
+          ? api.deeds.updateDeed(deedId)
+          : api.deeds.addDeed,
+        deedData
+      );
+      if (res.ok && res.data && type !== DEED_EDITOR_TYPE) {
+        const { _id } = res.data;
+        setDeedName("");
+        setDeedText("");
+        router.push({
+          pathname: `/deed/${_id}`,
+        });
+      }
+    } else {
+      setError(error);
+    }
   };
 
-  return { deedName, deedText, onChange, onSubbmit };
+  return { deedName, deedText, onChange, onSubbmit, isLoading, isSaving };
 };

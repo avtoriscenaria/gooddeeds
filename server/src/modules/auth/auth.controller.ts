@@ -23,4 +23,9 @@ export class AuthController {
   refresh(@Req() reqData) {
     return this.auth.refresh(reqData);
   }
+
+  @Get('/logout')
+  logout(@Req() reqData) {
+    return this.auth.logout(reqData);
+  }
 }

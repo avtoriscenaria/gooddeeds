@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { _fetch } from "src/helpers/_fetch";
 
@@ -7,6 +8,7 @@ interface ApiProps {
 }
 
 export const useApi = () => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState(null);
   const [requestError, setRequestError] = useState(false);
@@ -26,6 +28,13 @@ export const useApi = () => {
 
         setIsLoading(false);
         return res;
+      } else {
+        if (res.statusCode === 401) {
+          localStorage.clear();
+          router.push({
+            pathname: "/login",
+          });
+        }
       }
       setIsLoading(false);
     } catch (e: any) {

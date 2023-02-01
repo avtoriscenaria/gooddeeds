@@ -5,6 +5,7 @@ export const api = {
     login: { method: "POST", url: "/auth/login" },
     signUp: { method: "PUT", url: "/auth/sign-up" },
     refreshToken: { method: "GET", url: "/auth/refresh" },
+    logout: { method: "GET", url: "/auth/logout" },
   },
   user: {
     getUser: { method: "GET", url: "/user" },
@@ -32,6 +33,10 @@ export const api = {
     addFriend: (_id: string) => ({
       method: "GET",
       url: `/friends/add/${_id}`,
+    }),
+    deleteFriend: (_id: string) => ({
+      method: "DELETE",
+      url: `/friends/delete/${_id}`,
     }),
   },
 };

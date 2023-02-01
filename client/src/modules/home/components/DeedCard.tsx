@@ -5,10 +5,16 @@ import { useObserver } from "src/hooks";
 interface PropTypes {
   deed: any;
   isEditable?: boolean;
+  isFriend?: boolean;
   onDelete: (deed: any) => () => void;
 }
 
-export const Accordion = ({ deed, isEditable, onDelete }: PropTypes) => {
+export const DeedCard = ({
+  deed,
+  isEditable,
+  onDelete,
+  isFriend,
+}: PropTypes) => {
   const { containerRef, isShow } = useObserver();
   const [isOpen, setIsOpen] = useState(false);
   const { name, text } = deed;
@@ -38,9 +44,10 @@ export const Accordion = ({ deed, isEditable, onDelete }: PropTypes) => {
           {isEditable && (
             <div className="flex items-center justify-end">
               <Button label="Delete" onClick={onDelete(deed)} />
-              <Button
-                label={<A href={`/deed/${deed._id}`} label="Edit" />}
-                onClick={() => {}}
+              <A
+                className="text-black text-base ml-4"
+                href={`/deed/${deed._id}`}
+                label={<Button label="Edit" onClick={() => {}} />}
               />
             </div>
           )}

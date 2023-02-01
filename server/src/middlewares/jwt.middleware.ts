@@ -12,6 +12,7 @@ import { getTokenFromHeader } from 'src/helpers';
 export class JWTMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     const token = getTokenFromHeader(req);
+
     try {
       jwt.verify(token, process.env.SECRET);
       next();

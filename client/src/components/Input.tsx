@@ -44,7 +44,9 @@ export const Input = ({
             name={name}
             value={value}
             ref={textareaRef}
-            className={`border px-3${isError ? " border-rose-600" : ""}`}
+            className={`border resize-none px-3${
+              isError ? " border-rose-600" : ""
+            }`}
             onChange={onChange}
           />
         ) : (

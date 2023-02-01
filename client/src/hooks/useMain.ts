@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { api } from "src/constants/api";
 import { useApi } from "src/hooks";
@@ -7,21 +8,40 @@ import { setUser } from "src/redux/reducers/user";
 import { getUser } from "src/redux/selectors";
 
 export const useMain = () => {
-  const { request, data = {} }: any = useApi();
+  const router = useRouter();
+  const {
+    request: getUserRequest,
+    data: userData = {},
+    isLoading: _isLoading,
+  }: any = useApi();
+  const { request: logout }: any = useApi();
   const dispatch = useDispatch();
   const user = useAppSelector(getUser);
 
+  const isLoading = useMemo(() => !!user && _isLoading, [user, _isLoading]);
+
   useEffect(() => {
     if (user === null) {
-      request(api.user.getUser);
+      getUserRequest(api.user.getUser);
     }
   }, [user]);
 
   useEffect(() => {
-    if (data && user === null) {
-      dispatch(setUser(data));
+    if (userData && user === null) {
+      dispatch(setUser(userData));
     }
-  }, [data, user]);
+  }, [userData, user]);
 
-  return { user: user || {} };
+  const onLogout = async () => {
+    const res = await logout(api.auth.logout);
+    if (res.ok) {
+      localStorage.clear();
+      dispatch(setUser(null));
+      router.push({
+        pathname: "/login",
+      });
+    }
+  };
+
+  return { user: user || {}, router, onLogout, isLoading };
 };

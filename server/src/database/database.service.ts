@@ -23,9 +23,14 @@ export class DBService {
     return await this.database.findOne({ _id });
   };
 
-  getAll = async (data) => {
-    return await this.database.find(data).toArray();
+  getAll = async (data, selectors?: any) => {
+    console.log('sel', selectors);
+    return await this.database.find(data, selectors).toArray();
   };
+  // getAll2 = async (data, selectors?: any) => {
+  //   console.log('sel', selectors);
+  //   return await this.database.find(data, { nickname: 0 }).toArray();
+  // };
 
   create = async (data) => {
     console.log('database');

@@ -32,16 +32,14 @@ export const _fetch = async (
   const res = await __fetch(apiInfo, body);
   if (res.statusCode === 403) {
     const refreshToken = LSGetter(LSItems.REFRESH_KEY);
-    let {
-      ok,
-      data: { refresh_token, access_token },
-    } = await __fetch(api.auth.refreshToken, {}, refreshToken);
-    if (ok) {
+    let refreshRes = await __fetch(api.auth.refreshToken, {}, refreshToken);
+    if (refreshRes.ok && refreshRes.data) {
+      const { refresh_token, access_token } = refreshRes.data;
       localStorage.setItem(LSItems.ACCESS_KEY, access_token);
       localStorage.setItem(LSItems.REFRESH_KEY, refresh_token);
       return __fetch(apiInfo, body);
     }
-    return null;
+    return refreshRes;
   }
   return res;
 };

@@ -1,8 +1,9 @@
 import Link from "next/link";
+import { ReactNode } from "react";
 
 interface PropTypes {
   href: string;
-  label: string;
+  label: string | ReactNode;
   className?: string;
 }
 
