@@ -18,7 +18,7 @@ export const FriendCard = ({
 
   const onDelete = async () => {
     const res = await request(api.friends.deleteFriend(friend._id));
-    if (res.ok) {
+    if (res?.ok) {
       onDeleteFromProps(friend._id);
     }
   };

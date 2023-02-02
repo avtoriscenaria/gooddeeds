@@ -96,8 +96,11 @@ export class AuthService {
     if (user) {
       const refresh_token = getTokenFromHeader(req);
       try {
+        console.log('refresh_token', refresh_token);
+        console.log('uuid_key', user.uuid_key);
         jwt.verify(refresh_token, user.uuid_key);
       } catch (e) {
+        console.log('error', e);
         await this.userModel.updateOne({ _id: data._id }, { uuid_key: null });
         throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
       }
@@ -107,7 +110,7 @@ export class AuthService {
 
       return { ok: true, data: tokens };
     }
-    throw new HttpException('refresh broken', HttpStatus.BAD_REQUEST);
+    //throw new HttpException('refresh broken', HttpStatus.BAD_REQUEST);
   }
 
   async logout(req) {

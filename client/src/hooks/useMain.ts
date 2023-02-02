@@ -9,20 +9,15 @@ import { getUser } from "src/redux/selectors";
 
 export const useMain = () => {
   const router = useRouter();
-  const {
-    request: getUserRequest,
-    data: userData = {},
-    isLoading: _isLoading,
-  }: any = useApi();
-  const { request: logout }: any = useApi();
+  const { request, data: userData = {} }: any = useApi();
   const dispatch = useDispatch();
   const user = useAppSelector(getUser);
 
-  const isLoading = useMemo(() => !!user && _isLoading, [user, _isLoading]);
+  const isLoading = useMemo(() => user === null, [user]);
 
   useEffect(() => {
     if (user === null) {
-      getUserRequest(api.user.getUser);
+      request(api.user.getUser);
     }
   }, [user]);
 
@@ -32,16 +27,5 @@ export const useMain = () => {
     }
   }, [userData, user]);
 
-  const onLogout = async () => {
-    const res = await logout(api.auth.logout);
-    if (res.ok) {
-      localStorage.clear();
-      dispatch(setUser(null));
-      router.push({
-        pathname: "/login",
-      });
-    }
-  };
-
-  return { user: user || {}, router, onLogout, isLoading };
+  return { router, isLoading };
 };

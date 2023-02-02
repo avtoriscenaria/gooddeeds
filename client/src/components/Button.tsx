@@ -1,10 +1,11 @@
-import { ReactNode } from "react";
+import { ReactNode, useMemo } from "react";
 
 interface PropTypes {
   onClick: () => void;
   label: string | ReactNode;
   className?: string;
   disabled?: boolean;
+  type?: string;
 }
 
 export const Button = ({ onClick, label, className, disabled }: PropTypes) => {

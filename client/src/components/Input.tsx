@@ -5,6 +5,7 @@ interface PropTypes {
   textareaRef?: LegacyRef<HTMLTextAreaElement>;
   label?: string;
   className?: string;
+  defaultValue?: string;
   type?: string;
   onChange?: (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -23,6 +24,7 @@ export const Input = ({
   inputRef,
   textareaRef,
   type,
+  defaultValue,
   onChange,
   isError,
   isTextArea,
@@ -42,6 +44,7 @@ export const Input = ({
             rows={12}
             cols={50}
             name={name}
+            defaultValue={defaultValue}
             value={value}
             ref={textareaRef}
             className={`border resize-none px-3${
@@ -52,6 +55,7 @@ export const Input = ({
         ) : (
           <input
             name={name}
+            defaultValue={defaultValue}
             value={value}
             ref={inputRef}
             className={`border h-8 px-3${isError ? " border-rose-600" : ""}`}

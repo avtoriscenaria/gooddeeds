@@ -9,6 +9,8 @@ export const api = {
   },
   user: {
     getUser: { method: "GET", url: "/user" },
+    deleteAccount: { method: "DELETE", url: "/user" },
+    updateNickname: { method: "PATCH", url: "/user" },
   },
   deeds: {
     getUserDeeds: (user_id: string) => ({

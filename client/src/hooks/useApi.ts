@@ -21,7 +21,7 @@ export const useApi = () => {
     try {
       const res = await _fetch(apiInfo, body);
 
-      if (res.ok) {
+      if (res?.ok) {
         if (res.data) {
           setData(res.data);
         }

@@ -47,14 +47,6 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
         query: { returnUrl: router.asPath },
       });
     } else {
-      // const { user, status } = await _fetch(api.user.getUser);
-      // if (status) {
-      //   dispatch(setUser(user));
-      //   setIsAuthorized(true);
-      // } else {
-      //   localStorage.clear();
-      // }
-
       setIsAuthorized(true);
     }
   };

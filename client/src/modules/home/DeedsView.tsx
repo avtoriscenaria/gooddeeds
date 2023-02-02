@@ -9,8 +9,15 @@ interface PropTypes {
 }
 
 export const DeedsView = ({ isFriend }: PropTypes) => {
-  const { deeds, onDelete, dialogClass, onCancel, isLoading, onAddDeed } =
-    useDeeds(isFriend);
+  const {
+    deeds,
+    onDelete,
+    dialogClass,
+    onCancel,
+    isLoading,
+    onAddDeed,
+    isDeedDeleting,
+  } = useDeeds(isFriend);
 
   return (
     <div className="w-full overflow-hidden flex flex-col">
@@ -34,12 +41,18 @@ export const DeedsView = ({ isFriend }: PropTypes) => {
           ))
         ) : (
           <div className="ml-3">
-            Are you a bad guy? You have no good deeds...
+            {isFriend
+              ? "There are no good deeds =("
+              : "    Are you a bad guy? You have no good deeds..."}
           </div>
         )}
       </div>
       {Boolean(dialogClass) && !isFriend && (
-        <Dialog {...dialogClass} onCancel={onCancel} />
+        <Dialog
+          {...dialogClass}
+          onCancel={onCancel}
+          isLoading={isDeedDeleting}
+        />
       )}
     </div>
   );

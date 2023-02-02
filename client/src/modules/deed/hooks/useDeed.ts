@@ -65,7 +65,7 @@ export const useDeed = (type?: string) => {
           : api.deeds.addDeed,
         deedData
       );
-      if (res.ok && res.data && type !== DEED_EDITOR_TYPE) {
+      if (res?.ok && res?.data && type !== DEED_EDITOR_TYPE) {
         const { _id } = res.data;
         setDeedName("");
         setDeedText("");

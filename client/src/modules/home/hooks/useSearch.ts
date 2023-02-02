@@ -32,7 +32,7 @@ export function useSearch(onAdd: (data: any) => void) {
 
   const _onAdd = (friend_id: string) => async () => {
     let res = await addFriend(api.friends.addFriend(friend_id));
-    if (res.ok && res.data) {
+    if (res?.ok && res?.data) {
       onClear();
       onAdd(res.data);
     }

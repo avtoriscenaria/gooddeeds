@@ -11,7 +11,7 @@ export const useDeeds = (isFriend?: boolean) => {
     update,
     isLoading: isDeedsLoading,
   }: any = useApi();
-  const { request: deleteDeed }: any = useApi();
+  const { request: deleteDeed, isLoading: isDeedDeleting }: any = useApi();
   const [dialogClass, setDialogClass] = useState<any>(null);
   const [isLoad, setIsLoad] = useState(false);
   const friend_id: any = router.query.id;
@@ -36,7 +36,7 @@ export const useDeeds = (isFriend?: boolean) => {
   }, [gedDeeds]);
 
   const onDelete = (deed: any) => () => {
-    const dialogClass = {
+    const _dialogClass = {
       title: "Deleting",
       description: `Are you sure that you want to deleter ${deed.name}?`,
       onSubbmit: async () => {
@@ -47,7 +47,7 @@ export const useDeeds = (isFriend?: boolean) => {
         }
       },
     };
-    setDialogClass(dialogClass);
+    setDialogClass(_dialogClass);
   };
 
   const onCancel = () => {
@@ -67,5 +67,6 @@ export const useDeeds = (isFriend?: boolean) => {
     onCancel,
     isLoading,
     onAddDeed,
+    isDeedDeleting,
   };
 };

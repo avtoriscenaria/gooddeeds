@@ -44,8 +44,20 @@ const userSlice = createSlice({
       }
       return state;
     },
+    updateUser(
+      state: IUserState | null,
+      { payload: newUserData }: PayloadAction<any>
+    ) {
+      console.log("updateUser", state);
+      if (state !== null) {
+        console.log("upd", { ...state, ...newUserData });
+        return { ...state, ...newUserData };
+      }
+      return state;
+    },
   },
 });
 
-export const { setUser, addFriend, deleteFriend } = userSlice.actions;
+export const { setUser, addFriend, deleteFriend, updateUser } =
+  userSlice.actions;
 export default userSlice.reducer;

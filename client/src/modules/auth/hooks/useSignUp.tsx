@@ -39,7 +39,12 @@ export const useSignUp = () => {
 
     if (isValid) {
       setIsError(false);
-      request(api.auth.signUp, signUpData);
+      const res = await request(api.auth.signUp, signUpData);
+      if (res?.ok) {
+        router.push({
+          pathname: "/login",
+        });
+      }
     } else {
       setIsError(true);
     }

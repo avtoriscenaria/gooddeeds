@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Body, Next } from '@nestjs/common';
+import { Controller, Get, Req, Delete, Patch, Body } from '@nestjs/common';
 
 import { UserService } from './user.service';
 
@@ -7,7 +7,17 @@ export class UserController {
   constructor(private readonly user: UserService) {}
 
   @Get('/')
-  getUser(@Req() reqData) {
-    return this.user.getUser(reqData);
+  getUser(@Req() req) {
+    return this.user.getUser(req);
+  }
+
+  @Patch('/')
+  updateUser(@Req() req, @Body() body) {
+    return this.user.updateUser(req, body);
+  }
+
+  @Delete('/')
+  deleteUser(@Req() req) {
+    return this.user.deleteUser(req);
   }
 }

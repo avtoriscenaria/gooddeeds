@@ -94,9 +94,11 @@ export class DeedsService {
     const deed = await this.deedModel.findById(deed_id);
 
     if (deed && deed.user_id === data._id) {
-      console.log('DELETE');
+      await this.deedModel.deleteOne({ _id: deed._id });
+
+      return { ok: true };
     }
 
-    return { ok: true };
+    throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
   }
 }
