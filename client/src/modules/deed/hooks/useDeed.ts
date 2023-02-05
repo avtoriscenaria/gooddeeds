@@ -17,7 +17,7 @@ export const useDeed = (type?: string) => {
   }: any = useApi();
   const [deedName, setDeedName] = useState("");
   const [deedText, setDeedText] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<any>(null);
 
   const isLoading = useMemo(
     () => type === DEED_EDITOR_TYPE && _isLoading,
@@ -33,7 +33,6 @@ export const useDeed = (type?: string) => {
   }, [deedId]);
 
   useEffect(() => {
-    console.log("initialDeed");
     if (type === DEED_EDITOR_TYPE && initialDeed && !isLoad) {
       setDeedName(initialDeed.name);
       setDeedText(initialDeed.text);
@@ -58,6 +57,7 @@ export const useDeed = (type?: string) => {
       text: deedText.trim(),
     };
     const { isValid, errors } = V_deed(deedData);
+
     if (isValid) {
       const res = await subbmitDeed(
         type === DEED_EDITOR_TYPE
@@ -65,6 +65,9 @@ export const useDeed = (type?: string) => {
           : api.deeds.addDeed,
         deedData
       );
+      if (res.ok) {
+        setError(null);
+      }
       if (res?.ok && res?.data && type !== DEED_EDITOR_TYPE) {
         const { _id } = res.data;
         setDeedName("");
@@ -74,9 +77,17 @@ export const useDeed = (type?: string) => {
         });
       }
     } else {
-      setError(error);
+      setError(errors);
     }
   };
 
-  return { deedName, deedText, onChange, onSubbmit, isLoading, isSaving };
+  return {
+    deedName,
+    deedText,
+    onChange,
+    onSubbmit,
+    isLoading,
+    isSaving,
+    error,
+  };
 };

@@ -51,7 +51,7 @@ export class DeedsService {
           },
         );
 
-        return { ok: true };
+        return { ok: true, message: 'Deed was updated' };
       }
       throw new HttpException('Have not such data', HttpStatus.BAD_REQUEST);
     } else {
@@ -63,9 +63,7 @@ export class DeedsService {
         user_id: data._id,
       });
 
-      console.log('deed', deed);
-
-      return { ok: true, data: { _id: deed._id } };
+      return { ok: true, data: { _id: deed._id }, message: 'Deed was created' };
     }
   }
 
@@ -75,9 +73,7 @@ export class DeedsService {
       throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }
     const { deed_id } = params;
-    console.log('iid', deed_id);
     const deed = await this.deedModel.findById(deed_id);
-    console.log('deed', deed);
     if (deed && deed.user_id === data._id) {
       return { ok: true, data: deed };
     }
@@ -96,7 +92,7 @@ export class DeedsService {
     if (deed && deed.user_id === data._id) {
       await this.deedModel.deleteOne({ _id: deed._id });
 
-      return { ok: true };
+      return { ok: true, message: 'Deed was deleted' };
     }
 
     throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);

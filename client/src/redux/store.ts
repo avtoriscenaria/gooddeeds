@@ -1,10 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { deedsSlice, userSlice } from "./reducers";
+import { userSlice, friendsSlice, messageSlice } from "./reducers";
 
 export const store = configureStore({
   reducer: {
-    deeds: deedsSlice,
     user: userSlice,
+    friends: friendsSlice,
+    message: messageSlice,
   },
 });
 

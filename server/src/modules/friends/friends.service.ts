@@ -70,7 +70,7 @@ export class FriendsService {
       { password: 0, friends: 0, uuid_key: 0 },
     );
 
-    return { ok: true, data: newFriend };
+    return { ok: true, data: newFriend, message: 'Friend was added' };
   }
 
   async deleteFriend(req, query) {
@@ -90,6 +90,6 @@ export class FriendsService {
       },
     );
 
-    return { ok: true };
+    return { ok: true, message: 'Friend was deleted' };
   }
 }

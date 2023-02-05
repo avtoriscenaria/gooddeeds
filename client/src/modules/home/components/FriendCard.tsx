@@ -1,34 +1,28 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { A, Button } from "src/components";
 import { api } from "src/constants/api";
-import { useApi, useObserver } from "src/hooks";
+import { useApi } from "src/hooks";
+import { deleteFriend } from "src/redux/reducers/friends";
+import { deleteFriend as deleteFriendFromUser } from "src/redux/reducers/user";
+import { AiOutlineClose } from "react-icons/ai";
 
 interface PropTypes {
   friend: any;
   selectedUserId?: string;
-  onDelete: (friend_id: string) => void;
 }
 
-export const FriendCard = ({
-  friend,
-  selectedUserId,
-  onDelete: onDeleteFromProps,
-}: PropTypes) => {
+export const FriendCard = ({ friend, selectedUserId }: PropTypes) => {
   const { request, isLoading } = useApi();
+  const dispatch = useDispatch();
 
   const onDelete = async () => {
     const res = await request(api.friends.deleteFriend(friend._id));
     if (res?.ok) {
-      onDeleteFromProps(friend._id);
+      dispatch(deleteFriend(friend._id));
+      dispatch(deleteFriendFromUser(friend._id));
     }
   };
-
-  console.log(
-    "selectedUserId",
-    selectedUserId,
-    friend._id,
-    selectedUserId === friend._id
-  );
 
   return (
     <div
@@ -38,7 +32,11 @@ export const FriendCard = ({
       }`}
     >
       <A href={`/friends/${friend._id}`} label={friend.nickname} />
-      <Button onClick={onDelete} label={"x"} disabled={isLoading} />
+      <Button
+        onClick={onDelete}
+        label={<AiOutlineClose className="text-xs" />}
+        disabled={isLoading}
+      />
     </div>
   );
 };

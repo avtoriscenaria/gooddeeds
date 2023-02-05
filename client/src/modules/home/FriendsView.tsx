@@ -4,12 +4,12 @@ import { FriendsSearch } from "./components/FriendsSearch";
 import { useFriends } from "./hooks";
 
 export const FriendsView = () => {
-  const { friends, isLoading, onDelete, onAdd, selectedUserId } = useFriends();
+  const { friends, isLoading, selectedUserId } = useFriends();
   return (
-    <div className="w-1/4 min-w-fit px-5 py-3 border-r">
-      <h1 className="pb-3">FRIENDS</h1>
-      <FriendsSearch onAdd={onAdd} />
-      <div>
+    <div className="w-1/4 min-w-fit py-3 border-r flex flex-col">
+      <h1 className="pb-3 px-5">FRIENDS</h1>
+      <FriendsSearch />
+      <div className="px-5 overflow-auto">
         {isLoading ? (
           <Loader />
         ) : (
@@ -17,7 +17,6 @@ export const FriendsView = () => {
             <FriendCard
               key={friend._id}
               friend={friend}
-              onDelete={onDelete}
               selectedUserId={selectedUserId}
             />
           ))

@@ -1,35 +1,32 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { api } from "src/constants/api";
 import { useApi } from "src/hooks";
-import { addFriend, deleteFriend } from "src/redux/reducers/user";
+import { setFriends } from "src/redux/reducers/friends";
+import { getFriends as getFriendsSelector } from "src/redux/selectors";
 
 export const useFriends = () => {
   const router = useRouter();
   const selectedUserId: any = router.query.id;
+  const friends = useSelector(getFriendsSelector);
 
-  const {
-    request: getFriends,
-    data: friends,
-    isLoading,
-    update,
-  }: any = useApi();
+  const { request, isLoading }: any = useApi();
   const dispatch = useDispatch();
 
+  const getFriends = async () => {
+    const res = await request(api.friends.getFriends);
+    if (res.ok) {
+      dispatch(setFriends(res.data));
+    }
+  };
+
   useEffect(() => {
-    getFriends(api.friends.getFriends);
-  }, []);
+    if (friends === null) {
+      getFriends();
+    }
+  }, [friends]);
 
-  const onDelete = (friend_id: string) => {
-    update((friends || []).filter((friend: any) => friend._id !== friend_id));
-    dispatch(deleteFriend(friend_id));
-  };
-
-  const onAdd = (data: any) => {
-    update([...(friends || []), data]);
-    dispatch(addFriend(data._id));
-  };
-
-  return { friends: friends || [], isLoading, onDelete, onAdd, selectedUserId };
+  return { friends: friends || [], isLoading, selectedUserId };
 };

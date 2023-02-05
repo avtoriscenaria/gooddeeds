@@ -1,16 +1,20 @@
 import { ChangeEvent, useMemo, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
 import { api } from "src/constants/api";
 import { useApi, useOnClickOutside } from "src/hooks";
 import { useAppSelector } from "src/redux/hooks";
 import { getUserFriends } from "src/redux/selectors";
+import { addFriend as addFriendToRedux } from "src/redux/reducers/friends";
+import { addFriend as addFriendToUser } from "src/redux/reducers/user";
 
-export function useSearch(onAdd: (data: any) => void) {
+export function useSearch() {
   const { request: getFriends, data: users, clean }: any = useApi();
   const { request: addFriend }: any = useApi();
   const [value, setValue] = useState("");
   const [isShow, setIsShow] = useState(false);
   const userFriends = useAppSelector(getUserFriends);
   const containerRef: any = useRef();
+  const dispatch = useDispatch();
 
   useOnClickOutside(containerRef, onClear);
   const inputRef: any = useRef();
@@ -34,7 +38,8 @@ export function useSearch(onAdd: (data: any) => void) {
     let res = await addFriend(api.friends.addFriend(friend_id));
     if (res?.ok && res?.data) {
       onClear();
-      onAdd(res.data);
+      dispatch(addFriendToRedux(res.data));
+      dispatch(addFriendToUser(res.data._id));
     }
   };
 

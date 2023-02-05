@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { UserDBService } from 'src/database/services';
 import { JWT } from 'src/services/jwt.service';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
@@ -41,7 +40,7 @@ export class UserService {
       const userWithSuchNickname = await this.userModel.findOne({ nickname });
       if (!userWithSuchNickname) {
         await this.userModel.updateOne({ _id: data._id }, { nickname });
-        return { ok: true };
+        return { ok: true, message: 'Nickname was changed' };
       }
       throw new HttpException(
         'User with the same nickname exists',

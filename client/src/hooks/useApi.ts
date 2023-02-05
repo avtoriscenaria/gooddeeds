@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { _fetch } from "src/helpers/_fetch";
+import { setMessage } from "src/redux/reducers/message";
 
 interface ApiProps {
   method: string;
@@ -12,6 +14,7 @@ export const useApi = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState(null);
   const [requestError, setRequestError] = useState(false);
+  const dispatch = useDispatch();
 
   const request = async (
     apiInfo: ApiProps,
@@ -22,6 +25,9 @@ export const useApi = () => {
       const res = await _fetch(apiInfo, body);
 
       if (res?.ok) {
+        if (res.message) {
+          dispatch(setMessage({ message: res.message }));
+        }
         if (res.data) {
           setData(res.data);
         }
@@ -29,6 +35,10 @@ export const useApi = () => {
         setIsLoading(false);
         return res;
       } else {
+        setRequestError(res);
+        if (res.message) {
+          dispatch(setMessage({ message: res.message, color: "red" }));
+        }
         if (res.statusCode === 401) {
           localStorage.clear();
           router.push({

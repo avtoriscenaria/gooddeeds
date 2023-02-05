@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import { _fetch } from "src/helpers/_fetch";
 import { useMain } from "src/hooks";
 import { A } from "./A";
-import { Button } from "./Button";
+import { Alert } from "./Alert";
 import { Loader } from "./Loader";
 import { Menu } from "./Menu";
 
@@ -12,7 +12,7 @@ interface PropTypes {
 }
 
 export const MainContainer = ({ children }: PropTypes) => {
-  const { router, isLoading } = useMain();
+  const { router, isLoading, message } = useMain();
 
   return isLoading ? (
     <div className="flex w-screen h-screen items-center justify-center text-2xl">
@@ -29,6 +29,7 @@ export const MainContainer = ({ children }: PropTypes) => {
         <Menu />
       </div>
       <div className="flex-grow overflow-hidden">{children}</div>
+      <Alert messageData={message} />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { A, Button, Input } from "src/components";
 import { useSignUp } from "src/modules/auth/hooks";
 

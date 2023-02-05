@@ -1,5 +1,3 @@
-import { LSItems } from "src/constants";
-
 export const LSGetter = (data_name: string) => {
   const data = localStorage.getItem(data_name);
 

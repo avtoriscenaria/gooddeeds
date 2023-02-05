@@ -1,11 +1,8 @@
 import { Button, Input } from "src/components";
 import { useSearch } from "../hooks";
+import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
 
-interface PropTypes {
-  onAdd: (data: any) => void;
-}
-
-export const FriendsSearch = ({ onAdd: onAddFromProps }: PropTypes) => {
+export const FriendsSearch = () => {
   const {
     value,
     onChange,
@@ -17,10 +14,10 @@ export const FriendsSearch = ({ onAdd: onAddFromProps }: PropTypes) => {
     isShow,
     containerRef,
     onClear,
-  } = useSearch(onAddFromProps);
+  } = useSearch();
 
   return (
-    <div className="flex flex-col items-start justify-start">
+    <div className="flex flex-col items-start justify-start px-5">
       <div className="text-xs">Search</div>
       <div className="relative max-w-fit" ref={containerRef}>
         <Input
@@ -41,7 +38,7 @@ export const FriendsSearch = ({ onAdd: onAddFromProps }: PropTypes) => {
                 {!userFriends.includes(friend._id) && (
                   <Button
                     onClick={onAdd(friend._id)}
-                    label="+"
+                    label={<AiOutlinePlus className="text-xs" />}
                     className="text-xs"
                   />
                 )}
@@ -54,7 +51,7 @@ export const FriendsSearch = ({ onAdd: onAddFromProps }: PropTypes) => {
             className="absolute top-0 right-0 h-8 w-8 flex items-center justify-center bg-gr cursor-pointer hover:opacity-60"
             onClick={onClear}
           >
-            x
+            <AiOutlineClose className="text-xs" />
           </div>
         )}
       </div>

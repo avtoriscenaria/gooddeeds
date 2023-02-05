@@ -2,7 +2,6 @@ import * as argon2 from 'argon2';
 import { v4 as uuidv4 } from 'uuid';
 import * as jwt from 'jsonwebtoken';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { UserDBService } from 'src/database/services';
 import { JWT } from 'src/services/jwt.service';
 import { getTokenFromHeader } from 'src/helpers';
 import { InjectModel } from '@nestjs/mongoose';
@@ -28,7 +27,6 @@ export class AuthService {
     const user = await this.userModel.findOne({
       $or: [{ email }, { nickname }],
     });
-    console.log('user', user);
     if (user) {
       throw new HttpException(
         'Such user already exists',
@@ -41,18 +39,14 @@ export class AuthService {
         nickname,
         password: passwordHashed,
       });
-      console.log('res', res);
-      return { ok: true };
+      return { ok: true, message: 'Account was created' };
     }
   }
 
   async loginUser({ email, password }: { email: string; password: string }) {
-    console.log('check 2', email, password);
     const user = await this.userModel.findOne({ email });
-    console.log('res', user);
     if (user) {
       const isPasswordCorrect = await argon2.verify(user.password, password);
-      console.log('isPasswordCorrect', isPasswordCorrect);
       if (isPasswordCorrect) {
         const payload = {
           _id: user._id,
@@ -96,11 +90,8 @@ export class AuthService {
     if (user) {
       const refresh_token = getTokenFromHeader(req);
       try {
-        console.log('refresh_token', refresh_token);
-        console.log('uuid_key', user.uuid_key);
         jwt.verify(refresh_token, user.uuid_key);
       } catch (e) {
-        console.log('error', e);
         await this.userModel.updateOne({ _id: data._id }, { uuid_key: null });
         throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
       }

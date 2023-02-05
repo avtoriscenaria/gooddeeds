@@ -8,8 +8,15 @@ interface PropTypes {
 }
 
 export default function DeedView({ type }: PropTypes) {
-  const { deedName, deedText, onChange, onSubbmit, isLoading, isSaving } =
-    useDeed(type);
+  const {
+    deedName,
+    deedText,
+    onChange,
+    onSubbmit,
+    isLoading,
+    isSaving,
+    error,
+  } = useDeed(type);
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -20,8 +27,14 @@ export default function DeedView({ type }: PropTypes) {
           <h1 className="text-white">
             {type === DEED_EDITOR_TYPE ? "Edit good deed" : "Create good deed"}
           </h1>
-          <Input name="deedName" value={deedName} onChange={onChange} />
           <Input
+            name="deedName"
+            value={deedName}
+            onChange={onChange}
+            isError={error?.name}
+          />
+          <Input
+            isError={error?.text}
             isTextArea
             name="deedText"
             value={deedText}

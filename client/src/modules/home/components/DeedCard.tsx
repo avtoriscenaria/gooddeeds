@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { A, Button } from "src/components";
 import { useObserver } from "src/hooks";
+import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 
 interface PropTypes {
   deed: any;
@@ -36,7 +37,9 @@ export const DeedCard = ({
       ) : (
         <>
           <div onClick={onClick} className="cursor-pointer">
-            <div className="text-xl">{name}</div>
+            <div className="text-xl text-cyan-500 hover:opacity-70 flex justify-start items-center">
+              {name} {isOpen ? <AiFillCaretDown /> : <AiFillCaretUp />}
+            </div>
             {isOpen && (
               <div className="overflow-hidden text-ellipsis">{text}</div>
             )}

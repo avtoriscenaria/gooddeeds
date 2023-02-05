@@ -48,9 +48,7 @@ const userSlice = createSlice({
       state: IUserState | null,
       { payload: newUserData }: PayloadAction<any>
     ) {
-      console.log("updateUser", state);
       if (state !== null) {
-        console.log("upd", { ...state, ...newUserData });
         return { ...state, ...newUserData };
       }
       return state;

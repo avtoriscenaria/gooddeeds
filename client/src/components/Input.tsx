@@ -1,5 +1,5 @@
 import { ChangeEvent, LegacyRef, useState } from "react";
-
+import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 interface PropTypes {
   inputRef?: LegacyRef<HTMLInputElement>;
   textareaRef?: LegacyRef<HTMLTextAreaElement>;
@@ -68,10 +68,10 @@ export const Input = ({
 
         {type === "password" && (
           <div
-            className="absolute top-0 right-0 h-8 w-8 flex items-center justify-center cursor-pointer bg-sky-800 text-white"
+            className="absolute top-0 right-0 h-8 w-8 flex items-center justify-center cursor-pointer"
             onClick={() => setIsVisible(!isVisible)}
           >
-            O
+            {isVisible ? <AiFillEye /> : <AiFillEyeInvisible />}
           </div>
         )}
       </div>

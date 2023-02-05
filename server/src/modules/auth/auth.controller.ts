@@ -10,7 +10,6 @@ export class AuthController {
   createUser(
     @Body() signUpData: { email: string; nickname: string; password: string },
   ) {
-    console.log('signUpData', signUpData);
     return this.auth.createUser(signUpData);
   }
 

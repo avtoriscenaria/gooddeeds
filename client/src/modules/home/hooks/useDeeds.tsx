@@ -25,11 +25,11 @@ export const useDeeds = (isFriend?: boolean) => {
     if (isFriend && friend_id && !isLoad) {
       await getDeedsRequest(api.deeds.getUserDeeds(friend_id));
       setIsLoad(true);
-    } else if (!isFriend) {
+    } else if (!isFriend && !isLoad) {
       await getDeedsRequest(api.deeds.getDeeds);
       setIsLoad(true);
     }
-  }, [friend_id, isLoad]);
+  }, [isLoad]);
 
   useEffect(() => {
     gedDeeds();
@@ -38,7 +38,12 @@ export const useDeeds = (isFriend?: boolean) => {
   const onDelete = (deed: any) => () => {
     const _dialogClass = {
       title: "Deleting",
-      description: `Are you sure that you want to deleter ${deed.name}?`,
+      description: (
+        <>
+          Are you sure that you want to delete{" "}
+          <span className="font-bold">{deed.name}</span>?
+        </>
+      ),
       onSubbmit: async () => {
         const res = await deleteDeed(api.deeds.deleteDeed(deed._id));
         if (res?.ok) {
