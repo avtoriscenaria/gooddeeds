@@ -1,5 +1,5 @@
 import React from "react";
-import { A, Button, Input } from "src/components";
+import { A, Button, Input, Alert } from "src/components";
 import { useSignUp } from "src/modules/auth/hooks";
 
 export default function SignUp() {
@@ -9,26 +9,33 @@ export default function SignUp() {
     nicknameRef,
     passwordRef,
     repeatPasswordRef,
-    isError,
+    message,
+    error,
   } = useSignUp();
 
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="border p-8">
         <h1 className="text-2xl font-bold text-center m-2 mb-5">SIGN UP</h1>
-        <Input label="Email" inputRef={emailRef} isError={isError} />
-        <Input label="Nickname" inputRef={nicknameRef} isError={isError} />
+        <Input label="Email" inputRef={emailRef} isError={error?.email} />
         <Input
+          label="Nickname"
+          inputRef={nicknameRef}
+          isError={error?.nickname}
+        />
+        <Input
+          className="mb-0"
           label="Password"
           type="password"
           inputRef={passwordRef}
-          isError={isError}
+          isError={error?.password}
         />
+        <p className="text-xs mb-4">At least 5 characters</p>
         <Input
           label="Repeat password"
           type="password"
           inputRef={repeatPasswordRef}
-          isError={isError}
+          isError={error?.repeatPassword}
         />
         <div className="flex items-center justify-center">
           <Button onClick={onSignUp} label="Sign up" />
@@ -37,6 +44,7 @@ export default function SignUp() {
           <A href={"/login"} label="Login" />
         </div>
       </div>
+      <Alert messageData={message} />
     </div>
   );
 }

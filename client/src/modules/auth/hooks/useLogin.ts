@@ -1,21 +1,35 @@
 import { useRouter } from "next/router";
 import { useRef, useState, useMemo, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { LSItems } from "src/constants";
 import { api } from "src/constants/api";
 import { LSGetter } from "src/helpers";
 import { useApi } from "src/hooks";
+import { useAppSelector } from "src/redux/hooks";
+import { removeMessage } from "src/redux/reducers/message";
+import { getMessage } from "src/redux/selectors";
 
 export const useLogin = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const { request, requestError, data } = useApi();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [isError, setIsError] = useState(false);
+  const message = useAppSelector(getMessage);
 
   const _isError = useMemo(
     () => isError || requestError,
     [isError, requestError]
   );
+
+  useEffect(() => {
+    if (message) {
+      setTimeout(() => {
+        dispatch(removeMessage());
+      }, 1500);
+    }
+  }, [message]);
 
   useEffect(() => {
     const access_token = LSGetter(LSItems.ACCESS_KEY);
@@ -55,5 +69,5 @@ export const useLogin = () => {
     }
   };
 
-  return { onLogin, emailRef, passwordRef, isError: _isError };
+  return { onLogin, emailRef, passwordRef, isError: _isError, message };
 };

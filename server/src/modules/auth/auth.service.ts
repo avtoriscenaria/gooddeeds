@@ -29,7 +29,7 @@ export class AuthService {
     });
     if (user) {
       throw new HttpException(
-        'Such user already exists',
+        'Such user already exists. Change email or nickname',
         HttpStatus.BAD_REQUEST,
       );
     } else {

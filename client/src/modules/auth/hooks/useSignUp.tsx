@@ -1,24 +1,33 @@
 import { useRouter } from "next/router";
 import { useRef, useState, useMemo, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { LSItems } from "src/constants";
 import { api } from "src/constants/api";
 import { LSGetter } from "src/helpers";
 import { useApi } from "src/hooks";
+import { useAppSelector } from "src/redux/hooks";
+import { removeMessage } from "src/redux/reducers/message";
+import { getMessage } from "src/redux/selectors";
 import { V_singUp } from "../validators";
 
 export const useSignUp = () => {
   const router = useRouter();
-  const { request, requestError } = useApi();
+  const dispatch = useDispatch();
+  const { request } = useApi();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const repeatPasswordRef = useRef<HTMLInputElement>(null);
   const nicknameRef = useRef<HTMLInputElement>(null);
-  const [isError, setIsError] = useState(false);
+  const [error, setIsError] = useState<any>(null);
+  const message = useAppSelector(getMessage);
 
-  const _isError = useMemo(
-    () => isError || requestError,
-    [isError, requestError]
-  );
+  useEffect(() => {
+    if (message) {
+      setTimeout(() => {
+        dispatch(removeMessage());
+      }, 1500);
+    }
+  }, [message]);
 
   useEffect(() => {
     const access_token = LSGetter(LSItems.ACCESS_KEY);
@@ -35,10 +44,10 @@ export const useSignUp = () => {
     const repeatPassword = repeatPasswordRef.current?.value.trim();
     const signUpData = { email, nickname, password };
 
-    const { isValid } = V_singUp({ ...signUpData, repeatPassword });
+    const { isValid, errors } = V_singUp({ ...signUpData, repeatPassword });
 
     if (isValid) {
-      setIsError(false);
+      setIsError(null);
       const res = await request(api.auth.signUp, signUpData);
       if (res?.ok) {
         router.push({
@@ -46,7 +55,7 @@ export const useSignUp = () => {
         });
       }
     } else {
-      setIsError(true);
+      setIsError(errors);
     }
   };
 
@@ -56,6 +65,7 @@ export const useSignUp = () => {
     passwordRef,
     repeatPasswordRef,
     nicknameRef,
-    isError: _isError,
+    message,
+    error,
   };
 };

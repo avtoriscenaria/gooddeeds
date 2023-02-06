@@ -1,9 +1,9 @@
 import React from "react";
-import { Button, Input, A } from "src/components";
+import { Button, Input, A, Alert } from "src/components";
 import { useLogin } from "src/modules/auth/hooks";
 
 export default function Login() {
-  const { onLogin, emailRef, passwordRef, isError } = useLogin();
+  const { onLogin, emailRef, passwordRef, isError, message } = useLogin();
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -23,6 +23,7 @@ export default function Login() {
           <A href={"/sign-up"} label="Make account" />
         </div>
       </div>
+      <Alert messageData={message} />
     </div>
   );
 }
