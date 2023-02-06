@@ -1,4 +1,3 @@
-import * as mongodb from 'mongodb';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JWT } from 'src/services/jwt.service';
 import { Model } from 'mongoose';

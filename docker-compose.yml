@@ -4,16 +4,14 @@ services:
   client:
     build:
       context: ./client
-    volumes:
-      - './client:/src'
     ports:
-      - '3007:3007'
-    command: npm start
+      - "3007:3007"
+    command: npm run start
   server:
     build:
       context: ./server
     volumes:
-      - './server:/usr/src/app'
+      - "./server:/usr/src/app"
     ports:
-      - '3008:3008'
+      - "3008:3008"
     command: npm start

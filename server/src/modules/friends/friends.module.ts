@@ -8,10 +8,7 @@ import { FriendsController } from './friends.controller';
 import { FriendsService } from './friends.service';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
-    //DatabaseModule
-  ],
+  imports: [MongooseModule.forFeature([{ name: 'User', schema: UserSchema }])],
   controllers: [FriendsController],
   providers: [FriendsService, JWT],
 })

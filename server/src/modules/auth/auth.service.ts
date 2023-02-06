@@ -34,7 +34,7 @@ export class AuthService {
       );
     } else {
       const passwordHashed = await argon2.hash(password);
-      const res = await this.userModel.create({
+      await this.userModel.create({
         email,
         nickname,
         password: passwordHashed,
@@ -101,7 +101,7 @@ export class AuthService {
 
       return { ok: true, data: tokens };
     }
-    //throw new HttpException('refresh broken', HttpStatus.BAD_REQUEST);
+    throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
   }
 
   async logout(req) {

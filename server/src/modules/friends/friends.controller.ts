@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Get,
-  Req,
-  Body,
-  Next,
-  Query,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Req, Query, Param, Delete } from '@nestjs/common';
 
 import { FriendsService } from './friends.service';
 

@@ -12,7 +12,6 @@ import { UserService } from './user.service';
   imports: [
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
     MongooseModule.forFeature([{ name: 'Deed', schema: DeedSchema }]),
-    //DatabaseModule
   ],
   controllers: [UserController],
   providers: [UserService, JWT],

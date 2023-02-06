@@ -43,7 +43,7 @@ export class DeedsService {
       const deed = await this.deedModel.findById(deed_id);
 
       if (deed && deed.user_id === data._id) {
-        const res = await this.deedModel.updateOne(
+        await this.deedModel.updateOne(
           { _id: deed_id },
           {
             name: deedData.name,
